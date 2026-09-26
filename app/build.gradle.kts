@@ -1,9 +1,19 @@
+import java.lang.System.load
+
+import java.util.Properties
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.jetbrainsKotlinSerialization)
     alias(libs.plugins.ksp)
     alias(libs.plugins.hilt)
+}
+
+val localProperties = Properties().apply {
+    rootProject.file("local.properties").inputStream().use { inputStream ->
+        load(inputStream)
+    }
 }
 
 android {
@@ -20,6 +30,16 @@ android {
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        buildConfigField(
+            "String",
+            "TMDB_API_KEY",
+            "\"${localProperties.getProperty("TMDB_API_KEY", "")}\""
+        )
+        buildConfigField(
+            "String",
+            "TMDB_BEARER_TOKEN",
+            "\"${localProperties.getProperty("TMDB_BEARER_TOKEN", "")}\""
+        )
     }
 
     buildTypes {
@@ -34,6 +54,7 @@ android {
         targetCompatibility = JavaVersion.VERSION_11
     }
     buildFeatures {
+        buildConfig = true
         compose = true
     }
 }
@@ -59,6 +80,10 @@ dependencies {
     implementation(libs.retrofit)
     implementation(libs.retrofit.kotlinx.serialization)
     implementation(libs.kotlinx.serialization.json)
+
+    // Images
+    implementation(libs.coil.compose)
+    implementation(libs.coil.network.okhttp)
 
     //DI
     implementation(libs.hilt.android)

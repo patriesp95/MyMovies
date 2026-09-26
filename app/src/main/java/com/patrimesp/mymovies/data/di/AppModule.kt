@@ -1,6 +1,6 @@
 package com.patrimesp.mymovies.data.di
 
-import com.patrimesp.mymovies.data.datasource.api.ApiConfig
+import com.patrimesp.mymovies.BuildConfig
 import com.patrimesp.mymovies.data.datasource.api.ApiConfig.BASE_URL
 import com.patrimesp.mymovies.data.datasource.api.ApiService
 import com.patrimesp.mymovies.data.repository.MovieRepositoryImpl
@@ -11,6 +11,7 @@ import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import kotlinx.serialization.json.Json
 import okhttp3.MediaType.Companion.toMediaType
+import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.kotlinx.serialization.asConverterFactory
 import javax.inject.Singleton
@@ -21,7 +22,7 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun provideNoteRepository(api: ApiService): MovieRepository = MovieRepositoryImpl(api)
+    fun provideMovieRepository(api: ApiService): MovieRepository = MovieRepositoryImpl(api)
 
     @Provides
     @Singleton
@@ -31,10 +32,35 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun provideRetrofit(json: Json): Retrofit {
+    fun provideRetrofit(
+        json: Json,
+        okHttpClient: OkHttpClient
+    ): Retrofit {
         return Retrofit.Builder()
             .baseUrl(BASE_URL)
+            .client(okHttpClient)
             .addConverterFactory(json.asConverterFactory("application/json".toMediaType()))
+            .build()
+    }
+
+    @Provides
+    @Singleton
+    fun provideOkHttpClient(): OkHttpClient {
+        return OkHttpClient.Builder()
+            .addInterceptor { chain ->
+                val request = chain.request()
+                val authenticatedUrl = request.url.newBuilder()
+                    .addQueryParameter("api_key", BuildConfig.TMDB_API_KEY)
+                    .build()
+
+                chain.proceed(
+                    request.newBuilder()
+                        .url(authenticatedUrl)
+                        .header("Authorization", "Bearer ${BuildConfig.TMDB_BEARER_TOKEN}")
+                        .header("accept", "application/json")
+                        .build()
+                )
+            }
             .build()
     }
 
