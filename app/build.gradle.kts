@@ -53,6 +53,11 @@ dependencies {
     // Navigation
     implementation(libs.androidx.navigation.compose)
 
+    // Network and JSON serialization
+    implementation(libs.retrofit)
+    implementation(libs.retrofit.kotlinx.serialization)
+    implementation(libs.kotlinx.serialization.json)
+
     //DI
     implementation(libs.hilt.android)
     implementation(libs.hilt.navigation)
