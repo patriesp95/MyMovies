@@ -13,4 +13,8 @@ class MovieRepositoryImpl @Inject constructor(
     override suspend fun getMovieList(): List<Movie> {
         return apiService.getMovies().results.map { it.toDomain() }
     }
+
+    override suspend fun getMovieDetail(movieId: Int): Movie {
+        return apiService.getMovieDetail(movieId).toDomain()
+    }
 }

@@ -9,6 +9,10 @@ data class Movie(
     val overview: String,
     val popularity: Double,
     val posterPath: String? = null,
+    val backdropPath: String? = null,
     val releaseDate: String,
     val title: String,
+    val runtime: Int? = null,
+    val voteAverage: Double = 0.0,
+    val genres: List<String> = emptyList()
 )

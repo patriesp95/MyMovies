@@ -6,4 +6,4 @@ import kotlinx.serialization.Serializable
 object MovieList
 
 @Serializable
-object MovieDetail
+data class MovieDetail(val movieId: Int)

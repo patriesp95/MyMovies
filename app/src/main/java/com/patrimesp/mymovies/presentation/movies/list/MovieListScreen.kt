@@ -20,7 +20,7 @@ import com.patrimesp.mymovies.ui.theme.MyMoviesTheme
 @Composable
 fun MovieListScreen(
     moviesViewModel: MoviesViewModel = hiltViewModel(),
-    navigateToDetail: () -> Unit
+    navigateToDetail: (Int) -> Unit
 ) {
     val uiState by moviesViewModel.uiState.collectAsStateWithLifecycle()
 
@@ -37,7 +37,7 @@ fun MovieListScreen(
 @Composable
 fun MovieListContent(
     uiState: UiState,
-    navigateToDetail: () -> Unit
+    navigateToDetail: (Int) -> Unit
 ) {
     Surface(
         modifier = Modifier.fillMaxSize(),

@@ -29,7 +29,7 @@ import com.patrimesp.mymovies.domain.entity.Movie
 @Composable
 internal fun MovieGrid(
     movies: List<Movie>,
-    navigateToDetail: () -> Unit
+    navigateToDetail: (Int) -> Unit
 ) {
     LazyVerticalGrid(
         columns = GridCells.Fixed(3),
@@ -53,12 +53,12 @@ internal fun MovieGrid(
 @Composable
 private fun MovieGridItem(
     movie: Movie,
-    navigateToDetail: () -> Unit
+    navigateToDetail: (Int) -> Unit
 ) {
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .clickable(onClick = navigateToDetail)
+            .clickable { navigateToDetail(movie.id) }
     ) {
         Box(
             contentAlignment = Alignment.Center,
