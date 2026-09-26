@@ -40,7 +40,7 @@ internal fun MovieDetailContent(
                         .aspectRatio(16f / 10f)
                         .background(MaterialTheme.colorScheme.surfaceVariant)
                 ) {
-                    val imagePath = movie.backdropPath ?: movie.posterPath
+                    val imagePath = movie.posterPath
                     if (imagePath != null) {
                         AsyncImage(
                             model = "https://image.tmdb.org/t/p/w780$imagePath",

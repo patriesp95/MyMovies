@@ -23,7 +23,6 @@ fun MovieDetailResponse.toDomain(): Movie {
         overview = overview,
         popularity = popularity,
         posterPath = posterPath,
-        backdropPath = backdropPath,
         releaseDate = releaseDate,
         title = title,
         runtime = runtime,
