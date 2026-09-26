@@ -2,17 +2,26 @@ package com.patrimesp.mymovies.presentation.movies.list
 
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 
 @Composable
 fun MovieListScreen(
-    modifier: Modifier = Modifier,
+    moviesViewModel: MoviesViewModel = hiltViewModel(),
     navigateToDetail: () -> Unit
 ) {
-    MovieListContent()
+    val uiState by moviesViewModel.uiState.collectAsStateWithLifecycle()
+
+    LaunchedEffect(Unit) {
+        moviesViewModel.getMovies()
+    }
+
+    MovieListContent(navigateToDetail=navigateToDetail)
 }
 
 @Composable
-fun MovieListContent() {
-    Text("Movie list screen")
+fun MovieListContent(navigateToDetail: () -> Unit) {
+
 }

@@ -2,7 +2,8 @@ package com.patrimesp.mymovies.presentation.movies.list
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.patrimesp.mymovies.data.response.list.MovieResponse
+import com.patrimesp.mymovies.domain.entity.Movie
+import com.patrimesp.mymovies.domain.usecase.GetMoviesUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -12,7 +13,9 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 @HiltViewModel
-class MoviesViewModel @Inject constructor() : ViewModel() {
+class MoviesViewModel @Inject constructor(
+    private val getMoviesUseCase: GetMoviesUseCase
+) : ViewModel() {
 
     private val _uiState = MutableStateFlow(UiState())
     val uiState: StateFlow<UiState> = _uiState.asStateFlow()
@@ -22,7 +25,7 @@ class MoviesViewModel @Inject constructor() : ViewModel() {
             _uiState.update { state -> state.copy(loading = true) }
 
             try {
-                val popularMovies = emptyList<MovieResponse>()
+                val popularMovies = getMoviesUseCase()
                 _uiState.update { state ->
                     state.copy(
                         popularMovies = popularMovies,
@@ -40,7 +43,7 @@ class MoviesViewModel @Inject constructor() : ViewModel() {
 }
 
 data class UiState(
-    var popularMovies: List<MovieResponse>? = null,
+    var popularMovies: List<Movie>? = null,
     val error: String? = null,
     val loading: Boolean = false
 )
